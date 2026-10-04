@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcBidirectionalStreamingChannels";
+
+package orders;
+
+service OrderStreaming {
+
+    rpc ProcessOrders(stream OrderRequest)
+        returns (stream OrderResponse);
+}
+
+message OrderRequest {
+    string order_id = 1;
+    OrderAction action = 2;
+    string product_name = 3;
+    int32 quantity = 4;
+}
+
+message OrderResponse {
+    string order_id = 1;
+    OrderStatus status = 2;
+    string message = 3;
+    string server_time = 4;
+    string worker_id = 5;
+}
+
+enum OrderAction {
+    UNKNOWN = 0;
+    CREATE = 1;
+    CANCEL = 2;
+    STATUS = 3;
+}
+
+enum OrderStatus {
+    RECEIVED = 0;
+    PROCESSING = 1;
+    COMPLETED = 2;
+    CANCELLED = 3;
+    FAILED = 4;
+}
